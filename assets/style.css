@@ -1,0 +1,52 @@
+header {
+  background-color: #343a40; 
+}
+
+header h1 {
+  margin: 0;
+  padding: 1rem;
+}
+
+aside {
+  padding: 1rem;
+}
+
+.btn {
+	display: block;
+	width: 100%;
+}
+
+.weather-search {
+  width: 100%;
+}
+
+.optional-city {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.current-weather-box {
+  border: 1px solid #000;
+  padding: 10px; 
+  margin-bottom: 20px; 
+}
+
+
+#forecast-heading {
+  margin-top: 20px;
+}
+
+
+.forecast-container {
+  margin-top: 20px;
+}
+
+/* Style the forecast boxes */
+.forecast-box {
+  border: 1px solid #000;
+  background-color: #282836;
+  color: #ffffff;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+		<link rel="stylesheet" type="text/css" href="assets/style.css">
+  <title>Weather Dashboard</title>
+</head>
+
+<body>
+  <header class="container-fluid text-center text-white bg-dark p-2">
+    <h1>Weather Dashboard</h1>
+  </header>
+
+  <div class="container-fluid" style="max-width: 1400px">
+    <div class="row">
+      <aside class="col-lg-3 pb-3">
+        <h2 class="mt-1 h3">
+          Search for a City:
+        </h2>
+        <form id="search-form" class="form">
+          <div class="form-group">
+            <div class="input-group">
+              <input class="form-control weather-search" type="text" id="search-input" placeholder="London"
+                aria-label="Search for a City" />
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-primary" id="search-button">
+                  Search
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+				<div class="mt-3">
+					<h5 class="mb-2">Optional Cities:</h5>
+					<div class="btn-group-vertical">
+						<button type="button" class="btn btn-secondary optional-city mb-2" data-city="Berlin">Berlin</button>
+						<button type="button" class="btn btn-secondary optional-city mb-2" data-city="Paris">Paris</button>
+						<button type="button" class="btn btn-secondary optional-city mb-2" data-city="Edinburgh">Edinburgh</button>
+						<button type="button" class="btn btn-secondary optional-city mb-2" data-city="Madrid">Madrid</button>
+						<button type="button" class="btn btn-secondary optional-city mb-2" data-city="Birmingham">Birmingham</button>
+						<button type="button" class="btn btn-secondary optional-city mb-2" data-city="London">London</button>
+					</div>
+				</div>
+      </aside>
+
+      <div class="col-lg-9 pb-3">
+        <section id="today" class="mt-3" role="region" aria-live="polite"></section>
+        <div id="forecast" class="row mt-3" role="region" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-QI2GxTmMfn3s1rh2Wn9SbNekzgjLRDHS8jGUxFwRGG7d9st0bweWeSvC0ezg/AZO"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-QI2GxTmMfn3s1rh2Wn9SbNekzgjLRDHS8jGUxFwRGG7d9st0bweWeSvC0ezg/AZO"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgydDTL5NuK+I3QhPv9Hq7Q1TGMAq+EfxwG7gWCoiibN6gHq+2ucmrM5H8rN"
+    crossorigin="anonymous"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
