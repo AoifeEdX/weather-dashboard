@@ -41,7 +41,6 @@ The following sites were used for reference:
 * Guide on showing JavaScript data in HTML from [JavaScript Tutorial](https://www.javascripttutorial.net/javascript-dom/javascript-textcontent/).
 * Guide on using JQUERY from [JQUERY User Interface](https://jqueryui.com/).
 * Guide on customising HTML from [Bootstrap](https://getbootstrap.com/).
-* Guide on adding fonts from [Google Fonts](https://fonts.googleapis.com/).
 
 ## License
 
