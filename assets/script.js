@@ -109,7 +109,6 @@ const addToSearchHistory = (city) => {
   const listItem = document.createElement('button');
   listItem.textContent = city;
   listItem.classList.add('btn', 'btn-secondary', 'mb-2');
-  listItem.style.width = '300px'; 
   listItem.addEventListener('click', async () => {
     const currentWeather = await getCurrentWeather(city);
     displayCurrentWeather(currentWeather);
