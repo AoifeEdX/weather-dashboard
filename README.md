@@ -23,6 +23,7 @@ A simple weather dashboard webpage that features dynamically updated HTML and CS
    * An icon representation of weather conditions
   * The temperature
   * The humidity
+	* The wind speed
 * When a user clicks on a city in the search history, they are again presented with current and future conditions for that city
 
 ## Screenshot
@@ -46,7 +47,7 @@ The following sites were used for reference:
 
 ### MIT License
 
-Copyright (c) 2023 AoifeEdX
+Copyright (c) 2024 AoifeEdX
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

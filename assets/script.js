@@ -1,120 +1,209 @@
+// Constants for API key and URL
 const apiKey = '6101926e2dfd52e44805f37f6aa11044';
 const apiUrl = 'https://api.openweathermap.org/data/2.5/';
+
+// DOM elements
 const searchForm = document.getElementById('search-form');
 const searchInput = document.getElementById('search-input');
 const historyList = document.getElementById('history');
 const todaySection = document.getElementById('today');
 const forecastSection = document.getElementById('forecast');
 
+// Function to fetch and display default weather for Dublin, Ireland
+const fetchDefaultWeather = async () => {
+	// Default city
+	const defaultCity = 'Dublin';
+	// Fetch current weather for default city
+	const defaultWeather = await getCurrentWeather(defaultCity);
+	displayCurrentWeather(defaultWeather);
+	// Fetch forecast for default city
+	const defaultForecast = await getForecast(defaultCity);
+	displayForecast(defaultForecast);
+};
+
+// Call the fetchDefaultWeather function when the page loads
+document.addEventListener('DOMContentLoaded', fetchDefaultWeather);
+
+// Function to fetch current weather data
 const getCurrentWeather = async (city) => {
-  const url = `${apiUrl}weather?q=${city}&appid=${apiKey}&units=metric`;
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching current weather:', error);
-    return null;
-  }
+	// API URL for current weather
+	const url = `${apiUrl}weather?q=${city}&appid=${apiKey}&units=metric`;
+	try {
+		// Fetch data from the API
+		const response = await fetch(url);
+		const data = await response.json();
+		return data;
+	} catch (error) {
+		// Handle errors
+		console.error('Error fetching current weather:', error);
+		return null;
+	}
 };
 
+// Function to fetch forecast data
 const getForecast = async (city) => {
-  const url = `${apiUrl}forecast?q=${city}&appid=${apiKey}&units=metric`;
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching forecast:', error);
-    return null;
-  }
+	// API URL for forecast
+	const url = `${apiUrl}forecast?q=${city}&appid=${apiKey}&units=metric`;
+	try {
+		// Fetch data from the API
+		const response = await fetch(url);
+		const data = await response.json();
+		// Extract the next four days of forecast data
+		const numberOfDataPoints = 4 * 8; // 4 days with 8 data points per day
+		const forecastData = data.list.slice(1, numberOfDataPoints); // Exclude the current day
+		return { city: data.city, list: forecastData };
+	} catch (error) {
+		// Handle errors
+		console.error('Error fetching forecast:', error);
+		return null;
+	}
 };
 
+// Function to display current weather
 const displayCurrentWeather = (weatherData) => {
-  const { name, dt, main, weather, wind } = weatherData;
+	const { name, dt, main, weather, wind } = weatherData;
 
-  const date = dayjs.unix(dt).format('(DD-MM-YYYY)');
-  const iconUrl = `https://openweathermap.org/img/w/${weather[0].icon}.png`;
+	// Format date
+	const date = dayjs.unix(dt).format('dddd<br><b>D MMM</b>');
+	// Weather icon URL
+	const iconUrl = `https://openweathermap.org/img/w/${weather[0].icon}.png`;
+	// Temperature
+	const temperature = Math.round(main.temp);
 
-  const html = `
-    <div id="current-weather" class="mt-5 p-3 border">
-      <h2>${name} ${date}</h2>
-      <img src="${iconUrl}" alt="${weather[0].description}">
-      <p>Temperature: ${main.temp} °C</p>
-      <p>Humidity: ${main.humidity}%</p>
-      <p>Wind Speed: ${wind.speed} m/s</p>
-    </div>
-  `;
+	// HTML for displaying current weather
+	const html = `
+	<h2 class="mb-4">Today:</h2>
+	<div id="current-weather" class="bg-light p-3 border border-dark-subtle rounded text-center">
+		<div class="bg-secondary bg-gradient bg-opacity-25 rounded pt-4 mb-4">
+			<h2 class="display-5">${name}</h2>
+			<h3>${date}</h3>
+			<img src="${iconUrl}" alt="${weather[0].description}">
+		</div>
+		<p class="display-3">${temperature} °C</h3>
+		<h4><strong>Humidity:</strong> ${main.humidity}%</h4>
+		<h5><strong>Wind Speed:</strong> ${wind.speed} m/s</h5>
+	</div>
+	`;
 
-  todaySection.innerHTML = html;
+	// Insert the HTML into the DOM
+	todaySection.innerHTML = html;
 };
 
-
+// Function to display forecast
 const displayForecast = (forecastData) => {
-  const forecastList = forecastData.list;
+	const forecastList = forecastData.list;
 
-  const html = forecastList.slice(0, 5).map((forecast) => {
-    const { dt, main, weather } = forecast;
-    const date = dayjs.unix(dt).format('(DD-MM-YYYY)');
-    const iconUrl = `https://openweathermap.org/img/w/${weather[0].icon}.png`;
+	let html = ''; // Initialize HTML string for forecast
 
-    return `
-      <div class="col-md-2">
-        <div id="forecast-box" class="border p-3 mb-2">
-          <h5>${date}</h5>
-          <img src="${iconUrl}" alt="${weather[0].description}">
-          <p>Temperature: ${main.temp} °C</p>
-          <p>Humidity: ${main.humidity}%</p>
-        </div>
-      </div>
-    `;
-  }).join('');
+	let currentDate = ''; // Track current date to group forecast by day
 
-  forecastSection.innerHTML = `
-    <h2 class="mt-3">5-Day Forecast:</h2>
-    <div class="row mt-3">${html}</div>
-  `;
+	// Iterate through forecast data
+	forecastList.forEach((forecast, index) => {
+		const { dt, main, weather, wind } = forecast;
+		const date = dayjs.unix(dt).format('dddd<br><b>D MMM</b>');
+
+		// Check if it's a new date
+		if (date !== currentDate) {
+			// Weather icon URL
+			const iconUrl = `https://openweathermap.org/img/w/${weather[0].icon}.png`;
+			// Temperature
+			const temperature = Math.round(main.temp);
+
+			// Add HTML for forecast day
+			html += `
+				<div class="col-md-3 text-center mb-4">
+					<div id="forecast-box-${index}" class="bg-light border border-dark-subtle rounded p-3 mb-2">
+						<div class="bg-secondary bg-gradient bg-opacity-25 rounded pt-3 mb-4">
+							<h4>${date}</h3>
+							<img src="${iconUrl}" alt="${weather[0].description}">
+						</div>
+						<p class="display-5">${temperature} °C</h3>
+						<h5><strong>Humidity:</strong> ${main.humidity}%</h5>
+						<p><strong>Wind Speed:</strong> ${wind.speed} m/s</p>
+					</div>
+				</div>
+			`;
+
+			// Update currentDate to the current date
+			currentDate = date;
+		}
+	});
+
+	// Insert the HTML into the forecast section of the DOM
+	forecastSection.innerHTML = `
+		<h2 class="my-4">Next Four Days:</h2>
+		<div class="row">${html}</div>
+	`;
 };
 
+// Event listener for the search form
 searchForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const city = searchInput.value.trim();
+	event.preventDefault();
+	const city = searchInput.value.trim();
 
-  if (city !== '') {
-    const currentWeather = await getCurrentWeather(city);
-    displayCurrentWeather(currentWeather);
+	if (city !== '') {
+		// Fetch and display current weather
+		const currentWeather = await getCurrentWeather(city);
+		displayCurrentWeather(currentWeather);
 
-    const forecast = await getForecast(city);
-    displayForecast(forecast);
+		// Fetch and display forecast
+		const forecast = await getForecast(city);
+		displayForecast(forecast);
 
-    addToSearchHistory(city);
-  }
+		// Add the searched city to search history
+		addToSearchHistory(city);
+	}
 });
 
-document.querySelectorAll('.optional-city').forEach((button) => {
-  button.addEventListener('click', async () => {
-    const city = button.dataset.city;
-
-    const currentWeather = await getCurrentWeather(city);
-    displayCurrentWeather(currentWeather);
-
-    const forecast = await getForecast(city);
-    displayForecast(forecast);
-
-    addToSearchHistory(city);
-  });
-});
-
+// Function to add searched city to search history
 const addToSearchHistory = (city) => {
-  const listItem = document.createElement('button');
-  listItem.textContent = city;
-  listItem.classList.add('btn', 'btn-secondary', 'mb-2');
-  listItem.addEventListener('click', async () => {
-    const currentWeather = await getCurrentWeather(city);
-    displayCurrentWeather(currentWeather);
+	// Retrieve the searched cities from local storage or initialize an empty array
+	const storedCities = JSON.parse(localStorage.getItem('searchedCities')) || [];
 
-    const forecast = await getForecast(city);
-    displayForecast(forecast);
-  });
-  historyList.appendChild(listItem);
+	// Check if the city already exists in the search history
+	if (!storedCities.includes(city)) {
+		// Create a button element for the city
+		const listItem = document.createElement('button');
+		listItem.textContent = city;
+		listItem.classList.add('btn', 'btn-secondary', 'bg-gradient', 'btn-block', 'mb-2');
+
+		// Add click event listener to display weather and forecast when the button is clicked
+		listItem.addEventListener('click', async () => {
+			const currentWeather = await getCurrentWeather(city);
+			displayCurrentWeather(currentWeather);
+
+			const forecast = await getForecast(city);
+			displayForecast(forecast);
+		});
+
+		// Append the button to the history list
+		historyList.appendChild(listItem);
+
+		// Store the searched city in local storage
+		storedCities.push(city);
+		localStorage.setItem('searchedCities', JSON.stringify(storedCities));
+	}
 };
+
+// Load the previously searched cities from local storage on page load
+document.addEventListener('DOMContentLoaded', () => {
+	const storedCities = JSON.parse(localStorage.getItem('searchedCities')) || [];
+
+	// Create buttons for each stored city and append them to the history list
+	storedCities.forEach((city) => {
+		const listItem = document.createElement('button');
+		listItem.textContent = city;
+		listItem.classList.add('btn', 'btn-secondary', 'bg-gradient', 'mb-2');
+
+		// Add click event listener to display weather and forecast when the button is clicked
+		listItem.addEventListener('click', async () => {
+			const currentWeather = await getCurrentWeather(city);
+			displayCurrentWeather(currentWeather);
+
+			const forecast = await getForecast(city);
+			displayForecast(forecast);
+		});
+
+		historyList.appendChild(listItem);
+	});
+});

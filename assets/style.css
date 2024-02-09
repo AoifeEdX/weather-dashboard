@@ -1,10 +1,7 @@
 body {
-  font-family: 'Arial', sans-serif;
-	background-color: #7e7ba7;
-}
-
-header {
-	background-image: linear-gradient(to left top, #113c7d, #614caf);
+  margin: 0 auto;
+	background-color: #ffffff;
+	background-image: linear-gradient(to top left, #e3e4e9, #ffffff); 
 }
 
 .container-fluid {
@@ -23,14 +20,6 @@ header {
   border-radius: 0 5px 5px 0;
 }
 
-#search-container, #history-container {
-  background-color: #cdcada;
-	margin-bottom: 20px;
-	padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
 #history {
   margin-top: 10px;
 }
@@ -40,31 +29,6 @@ header {
   margin-bottom: 5px;
 }
 
-#current-weather {
-  background-image: linear-gradient(to left top, #6e95cc, #a7bfd4);
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+img {
+	width: 90px;
 }
-
-#forecast-box {
-  background-image: linear-gradient(to left top, #113c7d, #614caf);
-  color: #ffffff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-}
-
-#forecast-heading {
-  margin-top: 20px;
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #333;
-}
-
-.forecast-container {
-  margin-top: 20px;
-}
-
-
-
