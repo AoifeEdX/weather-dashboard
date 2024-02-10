@@ -40,24 +40,29 @@ const getCurrentWeather = async (city) => {
 	}
 };
 
-// Function to fetch forecast data
 const getForecast = async (city) => {
 	// API URL for forecast
 	const url = `${apiUrl}forecast?q=${city}&appid=${apiKey}&units=metric`;
 	try {
-		// Fetch data from the API
-		const response = await fetch(url);
-		const data = await response.json();
-		// Extract the next four days of forecast data
-		const numberOfDataPoints = 4 * 8; // 4 days with 8 data points per day
-		const forecastData = data.list.slice(1, numberOfDataPoints); // Exclude the current day
-		return { city: data.city, list: forecastData };
+			// Fetch data from the API
+			const response = await fetch(url);
+			const data = await response.json();
+			// Find the index of the first item for tomorrow
+			const tomorrowIndex = data.list.findIndex(item => {
+					const tomorrow = dayjs().add(1, 'day').startOf('day');
+					const itemDate = dayjs.unix(item.dt);
+					return itemDate.isSame(tomorrow, 'day');
+			});
+			// Slice the array starting from the index of tomorrow
+			const forecastData = data.list.slice(tomorrowIndex, tomorrowIndex + 4 * 8);
+			return { city: data.city, list: forecastData };
 	} catch (error) {
-		// Handle errors
-		console.error('Error fetching forecast:', error);
-		return null;
+			// Handle errors
+			console.error('Error fetching forecast:', error);
+			return null;
 	}
 };
+
 
 // Function to display current weather
 const displayCurrentWeather = (weatherData) => {
@@ -67,6 +72,7 @@ const displayCurrentWeather = (weatherData) => {
 	const date = dayjs.unix(dt).format('dddd<br><b>D MMM</b>');
 	// Weather icon URL
 	const iconUrl = `https://openweathermap.org/img/w/${weather[0].icon}.png`;
+	const weatherDescription = weather[0].description.toUpperCase();
 	// Temperature
 	const temperature = Math.round(main.temp);
 
@@ -77,7 +83,8 @@ const displayCurrentWeather = (weatherData) => {
 		<div class="bg-secondary bg-gradient bg-opacity-25 rounded pt-4 mb-4">
 			<h2 class="display-5">${name}</h2>
 			<h3>${date}</h3>
-			<img src="${iconUrl}" alt="${weather[0].description}">
+			<img src="${iconUrl}" alt="${weatherDescription}">
+			<p>${weatherDescription}</p><br>
 		</div>
 		<p class="display-3">${temperature} °C</h3>
 		<h4><strong>Humidity:</strong> ${main.humidity}%</h4>
@@ -106,6 +113,7 @@ const displayForecast = (forecastData) => {
 		if (date !== currentDate) {
 			// Weather icon URL
 			const iconUrl = `https://openweathermap.org/img/w/${weather[0].icon}.png`;
+			const weatherDescription = weather[0].description.toUpperCase();
 			// Temperature
 			const temperature = Math.round(main.temp);
 
@@ -115,7 +123,8 @@ const displayForecast = (forecastData) => {
 					<div id="forecast-box-${index}" class="bg-light border border-dark-subtle rounded p-3 mb-2">
 						<div class="bg-secondary bg-gradient bg-opacity-25 rounded pt-3 mb-4">
 							<h4>${date}</h3>
-							<img src="${iconUrl}" alt="${weather[0].description}">
+							<img src="${iconUrl}" alt="${weatherDescription}">
+							<p>${weatherDescription}</p><br>
 						</div>
 						<p class="display-5">${temperature} °C</h3>
 						<h5><strong>Humidity:</strong> ${main.humidity}%</h5>
